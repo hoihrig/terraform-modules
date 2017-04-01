@@ -19,7 +19,10 @@ variable "ami" {
 }
 variable "owner" {
   default = ""
-} 
+}
+variable "key_name" {
+  default = ""
+}
 variable "extra_security_groups" {
   description = "Additional list of security groups the Bastion instance shall have, that are not created by the module"
 
@@ -89,6 +92,7 @@ resource "aws_instance" "bastion" {
   instance_type          = "${var.instance_type}"
   iam_instance_profile   = "${var.iam_instance_profile}"
   subnet_id              = "${element(split(",", var.subnet_ids), count.index)}"
+  key_name               = "${var.key_name}"
   vpc_security_group_ids = [ "${aws_security_group.bastion.id}",
                              "${var.extra_security_groups}"
                            ]
